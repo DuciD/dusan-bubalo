@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dušan Bubalo — Quality Engineering & Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04060a;
+  
+  /* Deep Dark Frosted Glass */
+  --glass-bg: rgba(10, 14, 22, 0.65);
+  --glass-bg-hover: rgba(15, 22, 34, 0.8);
+  --glass-card: rgba(8, 12, 19, 0.6);
+  --glass-card-hover: rgba(13, 19, 30, 0.75);
+  
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-border-light: rgba(255, 255, 255, 0.11);
+  --glass-border-hover: rgba(56, 189, 248, 0.25);
+  
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #506074;
+  
+  --accent-cyan: #38bdf8;
+  --accent-emerald: #34d399;
+  --accent-muted-cyan: #7dd3fc;
+  
+  --glass-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+  --glass-shadow-hover: 0 20px 45px -8px rgba(0, 0, 0, 0.65);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  background-image:
+    /* Soft reflective light pools — mid intensity between flat and strong glow */
+    radial-gradient(ellipse 70% 45% at 18% 8%, rgba(56, 189, 248, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 40% at 88% 18%, rgba(52, 211, 153, 0.055) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 50% 55%, rgba(96, 165, 250, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 72% 88%, rgba(56, 189, 248, 0.045) 0%, transparent 50%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.018) 0%, transparent 35%, transparent 70%, rgba(56, 189, 248, 0.015) 100%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle architectural grid + soft glass sheen */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.012) 45%, rgba(255, 255, 255, 0.028) 50%, rgba(255, 255, 255, 0.01) 55%, transparent 100%),
+    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+  background-size: 100% 100%, 44px 44px, 44px 44px;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+/* Ambient reflection orbs — reduced */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(100px);
+  opacity: 0.28;
+}
+.ambient-glow-1 {
+  width: 380px;
+  height: 380px;
+  top: -80px;
+  right: 8%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, transparent 70%);
+}
+.ambient-glow-2 {
+  width: 340px;
+  height: 340px;
+  top: 42%;
+  left: -60px;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.16) 0%, transparent 70%);
+}
+.ambient-glow-3 {
+  width: 400px;
+  height: 400px;
+  bottom: -100px;
+  right: 18%;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.12) 0%, transparent 70%);
+}
+
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 1200px; margin: auto; padding: 0 32px; position: relative; z-index: 1; }
+
+/* ========================================================
+   NAVIGATION (Dark Frosted Glass)
+======================================================== */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(4, 6, 10, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+nav .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--accent-cyan);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-name {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.logo-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.navlinks {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 4px 6px;
+  border-radius: 99px;
+  border: 1px solid var(--glass-border);
+}
+
+.navlinks a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: 99px;
+  transition: all 0.2s ease;
+}
+
+.navlinks a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ========================================================
+   BUTTONS
+======================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn.primary {
+  background: rgba(56, 189, 248, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.btn.primary:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn.glass {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-main);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.btn.glass:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--glass-border-light);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Status Pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: rgba(52, 211, 153, 0.06);
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #a7f3d0;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+}
+
+/* ========================================================
+   HERO SECTION
+======================================================== */
+.hero {
+  min-height: 680px;
+  display: grid;
+  grid-template-columns: 1.25fr 0.9fr;
+  gap: 55px;
+  align-items: center;
+  padding: 55px 0 70px;
+  position: relative;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.kicker {
+  color: var(--accent-cyan);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* NAME: DUŠAN BUBALO (Outfit font - Beautiful, Modern, Crisp) */
+.hero-name-container {
+  margin-bottom: 10px;
+}
+
+.hero-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(38px, 5.2vw, 62px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #ffffff;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+/* HERO TITLE: Quality / Engineering / & Architecture (Original Stacked Style, Refined Size) */
+.hero-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(32px, 4.2vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 14px 0 20px;
+}
+
+.hero-title span {
+  display: block;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.lead {
+  font-size: 16px;
+  color: #d5deea;
+  max-width: 620px;
+  line-height: 1.65;
+  margin-bottom: 26px;
+  font-weight: 400;
+}
+
+.lead strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Glass Stat Badges */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+  max-width: 620px;
+}
+
+.stat-glass-card {
+  background: var(--glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  padding: 12px 15px;
+  border-radius: 11px;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.2s ease;
+}
+
+.stat-glass-card:hover {
+  background: var(--glass-card-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateY(-2px);
+}
+
+.stat-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  margin-bottom: 3px;
+}
+
+.stat-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.cta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ========================================================
+   HERO ARCHITECTURE DIAGRAM (Dark Glass Stack)
+======================================================== */
+.arch-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--glass-shadow);
+}
+
+.arch-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.arch-title-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.window-dots {
+  display: flex;
+  gap: 5px;
+}
+.window-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.arch-layers {
+  display: flex;
+  flex-direction: column;
+}
+
+.layer-box {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  padding: 14px 16px;
+  border-radius: 9px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.layer-box:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--glass-border-hover);
+  transform: translateX(3px);
+}
+
+.layer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.layer-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layer-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+}
+
+.layer-desc {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.layer-connector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+}
+
+.layer-connector-line {
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================================
+   SECTIONS GENERAL
+======================================================== */
+section {
+  padding: 80px 0;
+  border-top: 1px solid var(--glass-border);
+  position: relative;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  align-items: flex-end;
+  margin-bottom: 36px;
+}
+
+.eyebrow {
+  color: var(--accent-cyan);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 3.8vw, 38px);
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.section-head p {
+  color: var(--text-muted);
+  max-width: 480px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ========================================================
+   SECTION 01: ARCHITECTURE CARDS (Dark Frosted Glass)
+======================================================== */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.card {
+  background: var(--glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  padding: 24px 20px;
+  border-radius: 14px;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  background: var(--glass-card-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.card-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: var(--accent-cyan);
+}
+
+.card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.card p {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+  .tag {
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--glass-border);
+  padding: 3px 9px;
+  border-radius: 99px;
+  color: #cbd5e1;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+}
+
+/* ========================================================
+   SECTION 02: TIMELINE / EXPERIENCE (Clean, Unbolded Bullets)
+======================================================== */
+.timeline {
+  position: relative;
+  margin-top: 10px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 12px;
+  bottom: 20px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.job {
+  position: relative;
+  padding: 0 0 38px 52px;
+}
+
+.job:last-child {
+  padding-bottom: 10px;
+}
+
+.job-node {
+  position: absolute;
+  left: 11px;
+  top: 8px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #04060a;
+  border: 2px solid var(--accent-cyan);
+  z-index: 2;
+}
+
+.job-card {
+  background: var(--glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.2s ease;
+}
+
+.job-card:hover {
+  background: var(--glass-card-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateX(3px);
+}
+
+.job-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.job h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.date-badge {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  white-space: nowrap;
+}
+
+.company {
+  color: var(--accent-emerald);
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.job ul {
+  padding-left: 18px;
+  color: #d0dae8;
+  font-size: 13.5px;
+}
+
+.job li {
+  margin: 6px 0;
+  line-height: 1.6;
+}
+
+.job-group {
+  margin-top: 14px;
+}
+
+.job-group:first-of-type {
+  margin-top: 4px;
+}
+
+.job-group-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+/* ========================================================
+   SECTION 03: STACK & SKILLS
+======================================================== */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.skill-glass-box {
+  background: var(--glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: var(--glass-shadow);
+}
+
+.skill-glass-box h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skill-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  transition: all 0.2s ease;
+}
+
+.skill-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--glass-border-hover);
+  transform: translateX(3px);
+}
+
+.skill-row b {
+  font-size: 13.5px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.skill-row span {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.07);
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+}
+
+/* ========================================================
+   SECTION 04: EDUCATION
+======================================================== */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* ========================================================
+   SECTION 05: CONTACT BANNER
+======================================================== */
+.contact-glass-banner {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  border-radius: 18px;
+  padding: 42px 36px;
+  box-shadow: var(--glass-shadow);
+}
+
+.contact-content {
+  max-width: 650px;
+}
+
+.contact-content h2 {
+  font-size: clamp(28px, 3.8vw, 40px);
+  margin-bottom: 12px;
+}
+
+.contact-content p {
+  color: #cbd5e1;
+  font-size: 15.5px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ========================================================
+   FOOTER
+======================================================== */
+footer {
+  padding: 40px 0 65px;
+  border-top: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.footer-name {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+/* Toast alert for copied email */
+.copy-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(16, 185, 129, 0.95);
+  color: #041316;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.25s ease;
+  z-index: 100;
+}
+.copy-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ========================================================
+   RESPONSIVE DESIGN
+======================================================== */
+@media (max-width: 992px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 40px 0 50px;
+  }
+  .grid-3, .edu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .navlinks { display: none; }
+  .grid-3, .edu-grid, .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .hero-stats {
+    grid-template-columns: 1fr;
+  }
+  .contact-glass-banner {
+    padding: 28px 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .wrap { padding: 0 18px; }
+  .hero-name { font-size: 34px; }
+  .hero-title { font-size: 28px; }
+  .job-card { padding: 16px; }
+  .job { padding-left: 36px; }
+  .timeline::before { left: 6px; }
+  .job-node { left: 0px; }
+}
+
+/* ========================================================
+   PRINT / PDF — solid pages, no blank dark flash, no double breaks
+======================================================== */
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html {
+    background: #04060a !important;
+  }
+
+  body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #04060a !important;
+    background-image: none !important;
+    color: #f1f5f9 !important;
+    overflow: visible !important;
+    /* PDF renders thin fonts — bump weight globally */
+    font-weight: 500 !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  p, li, .lead, .section-head p, .layer-desc, .company, .stat-label, .tag {
+    font-weight: 500 !important;
+  }
+
+  .card p,
+  .job ul,
+  .job li,
+  .lead,
+  .section-head p,
+  .layer-desc,
+  .skill-row span {
+    color: #c5d0dc !important;
+    font-weight: 500 !important;
+  }
+
+  .card h3,
+  .job h3,
+  .skill-glass-box h3,
+  h2,
+  .hero-name,
+  .hero-title,
+  .logo-name {
+    font-weight: 700 !important;
+  }
+
+  .lead {
+    font-size: 15.5px !important;
+    line-height: 1.65 !important;
+  }
+
+  .job ul,
+  .job li {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+  }
+
+  .card p {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+  }
+
+  /* NEVER use fixed overlays in print — causes blank dark pages in PDF viewers */
+  body::before,
+  body::after,
+  .copy-toast,
+  .ambient-glow {
+    display: none !important;
+    content: none !important;
+  }
+
+  nav {
+    position: static !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #04060a !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  nav .navlinks,
+  nav .nav-cta {
+    display: none !important;
+  }
+
+  .wrap {
+    max-width: 1200px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 28px !important;
+  }
+
+  .hero {
+    min-height: auto !important;
+    grid-template-columns: 1.25fr 0.9fr !important;
+    gap: 40px !important;
+    padding: 28px 0 36px !important;
+    background: #04060a !important;
+    /* only break AFTER hero — do not also break-before next section */
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .lead,
+  .hero-stats {
+    max-width: 620px !important;
+  }
+
+  .section-head {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    margin-bottom: 18px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  h1, h2, h3,
+  .hero-name,
+  .hero-title,
+  .eyebrow,
+  .kicker {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .section-head + .grid-3,
+  .section-head + .timeline,
+  .section-head + .skills-grid,
+  .section-head + .edu-grid {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+  }
+
+  section {
+    padding: 28px 0 !important;
+    background: #04060a !important;
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  /* One break per section — avoid empty dark pages */
+  #architecture,
+  #experience,
+  #stack,
+  #education,
+  #contact {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* Remove hero break-after if next section already breaks before — keep only section breaks */
+  .hero {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  #architecture {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    /* Spread content down the landscape page */
+    padding: 36px 0 48px !important;
+    min-height: 170mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  #architecture .section-head {
+    margin-bottom: 28px !important;
+  }
+
+  #architecture .grid-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 22px 16px !important;
+    flex: 1 1 auto !important;
+    align-content: stretch !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #architecture .card {
+    padding: 22px 18px !important;
+    min-height: 170px !important;
+  }
+
+  #architecture .card-icon-box {
+    width: 34px !important;
+    height: 34px !important;
+    margin-bottom: 14px !important;
+  }
+
+  #architecture .card h3 {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    margin-bottom: 10px !important;
+  }
+
+  #architecture .card p {
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+    font-weight: 500 !important;
+    color: #c5d0dc !important;
+  }
+
+  #architecture .tags {
+    margin-top: 16px !important;
+    gap: 6px !important;
+  }
+
+  #architecture .tag {
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    padding: 3px 8px !important;
+  }
+
+  .grid-3,
+  .edu-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .card,
+  .skill-glass-box,
+  .contact-glass-banner,
+  .stat-glass-card,
+  .layer-box,
+  .arch-panel {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    /* fully opaque — no transparent glass in PDF */
+    background: #0c121c !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .job-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    background: #0c121c !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  .card p,
+  .job ul,
+  .lead,
+  .section-head p,
+  .layer-desc {
+    color: #c5d0dc !important;
+    font-weight: 500 !important;
+  }
+
+  #experience {
+    padding-top: 28px !important;
+  }
+
+  .job {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    padding-left: 0 !important;
+  }
+
+  .job-top,
+  .job-group,
+  .company {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* NCR & Sportion — own page, dark top padding (no @page margin) */
+  #experience .timeline > .job:nth-child(2),
+  #experience .timeline > .job:nth-child(3) {
+    break-before: page !important;
+    page-break-before: always !important;
+    padding-top: 28px !important;
+  }
+
+  /* IGT starts a page; GTECH + Other stay with it */
+  #experience .timeline > .job:nth-child(4) {
+    break-before: page !important;
+    page-break-before: always !important;
+    padding-top: 28px !important;
+  }
+
+  #experience .timeline > .job:nth-child(5),
+  #experience .timeline > .job:nth-child(6) {
+    break-before: avoid !important;
+    page-break-before: avoid !important;
+    padding-top: 18px !important;
+  }
+
+  #experience .timeline > .job:nth-child(4) .job-card,
+  #experience .timeline > .job:nth-child(5) .job-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .timeline::before,
+  .job-node {
+    display: none !important;
+  }
+
+  footer {
+    background: #04060a !important;
+    page-break-inside: avoid !important;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Soft background reflections -->
+<div class="ambient-glow ambient-glow-1" aria-hidden="true"></div>
+<div class="ambient-glow ambient-glow-2" aria-hidden="true"></div>
+<div class="ambient-glow ambient-glow-3" aria-hidden="true"></div>
+
+<!-- Copy Toast Notification -->
+<div id="copyToast" class="copy-toast">✓ Email copied to clipboard: dusanbubalo@gmail.com</div>
+
+<!-- Navigation Header (Dark Frosted Glass) -->
+<nav>
+  <div class="wrap">
+    <div class="logo-group">
+      <div class="logo-avatar">DB</div>
+      <div class="brand-text">
+        <div class="logo-name">DUŠAN BUBALO</div>
+        <div class="logo-sub">Quality Engineering & Architecture</div>
+      </div>
+    </div>
+    <div class="navlinks">
+      <a href="#architecture">Architecture</a>
+      <a href="#experience">Experience</a>
+      <a href="#stack">Stack</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn glass" href="mailto:dusanbubalo@gmail.com" onclick="copyEmail(event)">Copy Email</a>
+      <a class="btn primary" href="#contact">Get In Touch</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- HERO SECTION -->
+<section class="hero" style="border-top:0">
+  <div class="hero-content">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        Available for Strategic QE & Architecture Roles
+      </div>
+    </div>
+
+    <!-- Beautiful, Modern, Clean Name -->
+    <div class="hero-name-container">
+      <div class="hero-name">DUŠAN BUBALO</div>
+    </div>
+
+    <!-- Title (Like original structure: stacked with subtle secondary tone, refined smaller font) -->
+    <div class="kicker">Quality Engineering · Automation · AI</div>
+    <h1 class="hero-title">
+      Quality<br>
+      <span>Engineering</span>
+      &amp; Architecture.
+    </h1>
+
+    <p class="lead">
+      Results-driven Quality Engineering Architect with 13+ years of experience designing scalable test automation frameworks (Java &amp; Playwright), AI-assisted testing workflows, and enterprise CI/CD quality gates for mission-critical web, mobile, and cloud ecosystems.
+    </p>
+
+    <!-- Stat Badges -->
+    <div class="hero-stats">
+      <div class="stat-glass-card">
+        <div class="stat-num">13+</div>
+        <div class="stat-label">Years QE & Automation Leadership</div>
+      </div>
+      <div class="stat-glass-card">
+        <div class="stat-num">Java & TS</div>
+        <div class="stat-label">Playwright & Modular Frameworks</div>
+      </div>
+      <div class="stat-glass-card">
+        <div class="stat-num">AI + CI/CD</div>
+        <div class="stat-label">Intelligent Test Orchestration</div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="cta">
+      <a class="btn primary" href="#architecture">Explore Architecture ↓</a>
+      <a class="btn glass" href="mailto:dusanbubalo@gmail.com">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Me
+      </a>
+      <a class="btn glass" href="https://www.linkedin.com/in/dusan-bubalo-894a90130/" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn ↗
+      </a>
+      <a class="btn glass" href="https://github.com/DuciD" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURAL MODEL (Dark Frosted Glass Stack) -->
+  <div class="arch-panel">
+    <div class="arch-header">
+      <div class="arch-title-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        QE Architecture / Working Model
+      </div>
+      <div class="window-dots">
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+      </div>
+    </div>
+
+    <div class="arch-layers">
+      <div class="layer-box">
+        <div class="layer-top">
+          <span class="layer-name">AI & LLM-Assisted QA</span>
+          <span class="layer-badge">Next-Gen</span>
+        </div>
+        <div class="layer-desc">Authoring acceleration · selector resilience · failure triage · smart onboarding</div>
+      </div>
+
+      <div class="layer-connector"><div class="layer-connector-line"></div></div>
+
+      <div class="layer-box">
+        <div class="layer-top">
+          <span class="layer-name">Automation Framework Core</span>
+          <span class="layer-badge">Java & Playwright</span>
+        </div>
+        <div class="layer-desc">Java · TypeScript · Page Object Model · BDD / Cucumber · REST API · Web & Mobile</div>
+      </div>
+
+      <div class="layer-connector"><div class="layer-connector-line"></div></div>
+
+      <div class="layer-box">
+        <div class="layer-top">
+          <span class="layer-name">CI/CD & Cloud Orchestration</span>
+          <span class="layer-badge">Scalable</span>
+        </div>
+        <div class="layer-desc">GitHub Actions · Jenkins · LambdaTest · Perfecto Cloud · Parallel Grid Matrix</div>
+      </div>
+
+      <div class="layer-connector"><div class="layer-connector-line"></div></div>
+
+      <div class="layer-box">
+        <div class="layer-top">
+          <span class="layer-name">Quality Lifecycle & Governance</span>
+          <span class="layer-badge">End-to-End</span>
+        </div>
+        <div class="layer-desc">Requirements traceability → automated test execution → regression → release sign-off</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 01: ARCHITECTURE & SYSTEMS -->
+<section id="architecture">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">01 / System View</div>
+      <h2>What I design.</h2>
+    </div>
+    <p>A Quality Engineering architectural portfolio: capabilities designed as modular, maintainable systems, engineering patterns, and scalable platforms.</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>Enterprise QE Standards</h3>
+      <p>Scalable testing foundations, reusable framework baselines, onboarding pathways, code reviews, and enterprise Quality Engineering governance across distributed squads.</p>
+      <div class="tags">
+        <span class="tag">Standards</span>
+        <span class="tag">Governance</span>
+        <span class="tag">Mentoring</span>
+        <span class="tag">Architecture</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h3>Automation Architecture</h3>
+      <p>Robust enterprise automation using Playwright and Java with strict design patterns, high parallelization, resilient assertions, and seamless CI/CD pipeline integration.</p>
+      <div class="tags">
+        <span class="tag">Playwright</span>
+        <span class="tag">Java</span>
+        <span class="tag">POM</span>
+        <span class="tag">BDD</span>
+        <span class="tag">TypeScript</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 12L2.1 10.5"/><path d="M12 12V2.1"/></svg>
+      </div>
+      <h3>AI-Driven QA & LLMs</h3>
+      <p>Practical integration of AI and Large Language Models for automated test scenario generation, smart selector self-healing, fast failure triage, and accelerated QA onboarding.</p>
+      <div class="tags">
+        <span class="tag">AI / LLM</span>
+        <span class="tag">POC Design</span>
+        <span class="tag">Tool Evaluation</span>
+        <span class="tag">Smart Triage</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3>CI/CD Pipeline Quality Gates</h3>
+      <p>Automated test triggers, regression suites, and pull request validations integrated into Jenkins and GitHub Actions pipelines running against scalable cloud device grids.</p>
+      <div class="tags">
+        <span class="tag">GitHub Actions</span>
+        <span class="tag">Jenkins</span>
+        <span class="tag">Cloud Execution</span>
+        <span class="tag">LambdaTest</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      </div>
+      <h3>Full-Stack Testing Strategy</h3>
+      <p>Comprehensive verification across Web UI, RESTful APIs, Mobile applications (iOS/Android), emulators, and real devices under complex enterprise workflows.</p>
+      <div class="tags">
+        <span class="tag">Web E2E</span>
+        <span class="tag">REST API</span>
+        <span class="tag">Mobile iOS/Android</span>
+        <span class="tag">Perfecto</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <h3>Quality Strategy & Governance</h3>
+      <p>Requirements-to-test alignment, risk-based regression prioritization, automated defect reporting, and cross-functional quality leadership in Agile environments.</p>
+      <div class="tags">
+        <span class="tag">Agile / Scrum</span>
+        <span class="tag">STLC</span>
+        <span class="tag">PractiTest</span>
+        <span class="tag">Traceability</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 02: EXPERIENCE -->
+<section id="experience">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">02 / Timeline</div>
+      <h2>Professional experience.</h2>
+    </div>
+    <p>13+ years of continuous growth across enterprise QA automation, software quality engineering, and digital architecture.</p>
+  </div>
+
+  <div class="timeline">
+    <!-- Role 1 -->
+    <article class="job">
+      <div class="job-node"></div>
+      <div class="job-card">
+        <div class="job-top">
+          <h3>Senior QA Automation Engineer</h3>
+          <span class="date-badge">09/2024 — Present</span>
+        </div>
+        <div class="company">Candescent (acquisition of Digital First under NCR Voyix), Belgrade</div>
+
+        <div class="job-group">
+          <div class="job-group-title">Quality Engineering &amp; Strategy</div>
+          <ul>
+            <li>Drive Quality Engineering initiatives within the Quality Center of Excellence (QCoE), supporting ~30 teams across the organization.</li>
+            <li>Contribute to the definition and rollout of QE strategy, standards, and engineering practices, improving consistency, automation maturity, and quality across teams.</li>
+            <li>Act as a technical point of contact for automation strategy, framework architecture, AI-assisted QA, and modern testing practices.</li>
+          </ul>
+        </div>
+
+        <div class="job-group">
+          <div class="job-group-title">Automation &amp; AI</div>
+          <ul>
+            <li>Played a key role in designing and implementing an enterprise automation framework for UI, API, and Mobile testing, built around scalability, maintainability, reusability, reliability, and CI/CD integration.</li>
+            <li>Led the AI/LLM integration into the automation approach, applying AI-assisted capabilities to test authoring, selector resilience, debugging, maintenance, and QA workflows.</li>
+            <li>Established reusable framework foundations and standardized workflows that enable faster onboarding and more consistent automation adoption across teams.</li>
+          </ul>
+        </div>
+
+        <div class="job-group">
+          <div class="job-group-title">People &amp; Enablement</div>
+          <ul>
+            <li>Support QA engineers through onboarding, mentoring, technical guidance, framework adoption, and knowledge sharing, helping teams transition toward modern QE practices.</li>
+          </ul>
+        </div>
+
+        <div class="job-group">
+          <div class="job-group-title">SDLC &amp; QA Innovation</div>
+          <ul>
+            <li>Designed and developed an internal solution covering the broader testing lifecycle across the SDLC, with test automation as one component of a wider Quality Engineering ecosystem.</li>
+            <li>Delivered POCs, framework improvements, and technical recommendations supporting QA modernization, AI adoption, and engineering tooling decisions.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- Role 2 -->
+    <article class="job">
+      <div class="job-node"></div>
+      <div class="job-card">
+        <div class="job-top">
+          <h3>Senior QA Automation Engineer</h3>
+          <span class="date-badge">11/2023 — 09/2024</span>
+        </div>
+        <div class="company">NCR Voyix, Belgrade</div>
+
+        <div class="job-group">
+          <div class="job-group-title">Automation Strategy &amp; Enterprise Banking</div>
+          <ul>
+            <li>Led end-to-end test automation strategy for a large-scale enterprise Banking application across Web, Mobile, and Cloud platforms.</li>
+            <li>Transformed manual user stories from PractiTest into structured automated BDD scenarios, ensuring test coverage and traceability.</li>
+          </ul>
+        </div>
+
+        <div class="job-group">
+          <div class="job-group-title">Framework &amp; Multi-Platform Automation</div>
+          <ul>
+            <li>Built and maintained Java-based cross-browser automation frameworks for Web and iOS/Android emulators and simulators.</li>
+            <li>Designed and implemented automated Smoke, Sanity, and Regression suites across different testing stages and platforms.</li>
+          </ul>
+        </div>
+
+        <div class="job-group">
+          <div class="job-group-title">CI/CD &amp; Playwright Innovation</div>
+          <ul>
+            <li>Implemented cloud test execution using Perfecto and built CI/CD delivery pipelines with Jenkins and GitHub Actions.</li>
+            <li>Architected a Playwright POC with BDD, multi-platform execution, GitHub Actions integration, and LambdaTest cloud grid.</li>
+            <li>Promoted alignment between automation coverage and business requirements while improving automation stability across devices and platforms.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- Role 3 -->
+    <article class="job">
+      <div class="job-node"></div>
+      <div class="job-card">
+        <div class="job-top">
+          <h3>Senior QA Analyst</h3>
+          <span class="date-badge">04/2021 — 11/2023</span>
+        </div>
+        <div class="company">Sportion d.o.o, Belgrade</div>
+
+        <div class="job-group">
+          <div class="job-group-title">Quality &amp; Release Engineering</div>
+          <ul>
+            <li>Spearheaded end-to-end Functional, Sanity, and Regression testing for Continuous Integration, supporting reliable software releases and product quality.</li>
+            <li>Strategized and executed comprehensive test scope creation, reporting, defect identification, verification, and regression coverage.</li>
+            <li>Conducted Integration and System testing of Casino games based on customer and system requirements.</li>
+          </ul>
+        </div>
+
+        <div class="job-group">
+          <div class="job-group-title">Automation &amp; Framework Development</div>
+          <ul>
+            <li>Developed, maintained, and enhanced automation scripts using Selenium/Java and Playwright/TypeScript, reducing manual testing effort and improving execution efficiency.</li>
+            <li>Designed a BDD in TypeScript vs. pure Playwright POC, evaluating different approaches for scalable test automation.</li>
+          </ul>
+        </div>
+
+        <div class="job-group">
+          <div class="job-group-title">Cross-Functional Engineering</div>
+          <ul>
+            <li>Collaborated closely with Product Managers, Product Owners, developers, artists, mathematicians, and QA analysts to manage complex global Casino games.</li>
+            <li>Worked within Agile/Scrum, actively participating in sprint planning, stand-ups, and retrospectives.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- Role 4 -->
+    <article class="job">
+      <div class="job-node"></div>
+      <div class="job-card">
+        <div class="job-top">
+          <h3>QA Engineer</h3>
+          <span class="date-badge">01/2013 — 04/2021</span>
+        </div>
+        <div class="company">IGT, Belgrade</div>
+        <ul>
+          <li>Conducted Integration and System testing of complex Casino games against rigorous customer and compliance requirements.</li>
+          <li>Led QA testing processes to identify defects early, optimize gameplay usability, and ensure flawless user experience.</li>
+          <li>Collaborated closely with developers, Product Managers, artists, and mathematicians on high-complexity global gaming software.</li>
+          <li>Supported the release of a large portfolio of Casino games and products with consistently low defect ratios and high release quality.</li>
+          <li>Conducted performance and stress tests to evaluate stability, scalability, and game loading behavior under heavy loads.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Role 5 -->
+    <article class="job">
+      <div class="job-node"></div>
+      <div class="job-card">
+        <div class="job-top">
+          <h3>Flash Designer / Developer</h3>
+          <span class="date-badge">07/2011 — 12/2012</span>
+        </div>
+        <div class="company">GTECH, Belgrade</div>
+        <ul>
+          <li>Contributed to the development and testing of an interactive game selector for large-scale online gaming platforms.</li>
+          <li>Designed UI components and visual elements, creating dynamic interfaces and interactive game experiences.</li>
+          <li>Collaborated with cross-functional software teams on bug verification, test execution, and graphical quality assurance.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Other activities -->
+    <article class="job">
+      <div class="job-node"></div>
+      <div class="job-card">
+        <div class="job-top">
+          <h3>Other activities</h3>
+        </div>
+        <div class="company">Personal projects & continuous learning</div>
+        <ul>
+          <li>Website creation — building and maintaining personal and professional web projects.</li>
+          <li>Python — basic level for app development.</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- SECTION 03: STACK & SKILLS -->
+<section id="stack">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">03 / Technology</div>
+      <h2>Engineering stack.</h2>
+    </div>
+    <p>Comprehensive toolkit for modern Quality Engineering, test automation architectures, delivery pipelines, and test governance.</p>
+  </div>
+
+  <div class="skills-grid">
+    <!-- Automation & Frameworks Box -->
+    <div class="skill-glass-box">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Automation & Framework Development
+      </h3>
+      <div class="skill-items">
+        <div class="skill-row"><b>Playwright</b><span>TypeScript / JS</span></div>
+        <div class="skill-row"><b>Java</b><span>Core / OOP / Test Architecture</span></div>
+        <div class="skill-row"><b>Selenium WebDriver</b><span>Java / Grid</span></div>
+        <div class="skill-row"><b>BDD / Cucumber / Gherkin</b><span>Behavior-Driven Testing</span></div>
+        <div class="skill-row"><b>Page Object Model (POM)</b><span>Architecture & Patterns</span></div>
+        <div class="skill-row"><b>REST API / Postman / RestAssured</b><span>API Testing & Automation</span></div>
+      </div>
+    </div>
+
+    <!-- CI/CD & Cloud Quality Box -->
+    <div class="skill-glass-box">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Delivery, Cloud & Quality Lifecycle
+      </h3>
+      <div class="skill-items">
+        <div class="skill-row"><b>GitHub Actions</b><span>CI/CD Pipelines</span></div>
+        <div class="skill-row"><b>Jenkins</b><span>Build & Automated Testing</span></div>
+        <div class="skill-row"><b>LambdaTest</b><span>Cloud Browser Grid</span></div>
+        <div class="skill-row"><b>Perfecto</b><span>Cloud Mobile & Web Grid</span></div>
+        <div class="skill-row"><b>JIRA / Confluence / PractiTest</b><span>Quality Management</span></div>
+        <div class="skill-row"><b>Functional / Integration / System</b><span>Full Lifecycle Testing</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 04: EDUCATION & CERTIFICATIONS -->
+<section id="education">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">04 / Foundation</div>
+      <h2>Education & continuous learning.</h2>
+    </div>
+    <p>Academic foundation in web technologies paired with ongoing advanced certifications in software testing architecture.</p>
+  </div>
+
+  <div class="edu-grid">
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <h3>Bachelor of Web Design</h3>
+      <p>Visoka tehnička škola strukovnih studija — Novi Sad</p>
+      <div class="tags"><span class="tag">2006 — 2010</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <h3>Playwright JS Automation</h3>
+      <p>Advanced masterclass — Complete modern test automation framework from scratch</p>
+      <div class="tags"><span class="tag">2022</span><span class="tag">Mastery</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <h3>Java & Automation Architecture</h3>
+      <p>Enterprise Java test framework architecture, design patterns, and CI/CD pipelines</p>
+      <div class="tags"><span class="tag">2025</span><span class="tag">Advanced</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h3>Selenium WebDriver / Java</h3>
+      <p>Deep-dive course focused on Java-based Selenium framework engineering</p>
+      <div class="tags"><span class="tag">2018</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h3>Languages</h3>
+      <p><strong>English</strong> — Advanced / Professional · Berlitz A2 &amp; A3<br><strong>Serbian</strong> — Native<br><strong>Russian</strong> — Beginner</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3>Core Competencies</h3>
+      <p>Quality Architecture · Technical Mentorship · Problem-Solving · Agile Leadership · Attention to Detail</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 05: CONTACT -->
+<section id="contact">
+  <div class="contact-glass-banner">
+    <div class="contact-content">
+      <div class="eyebrow">05 / Connect</div>
+      <h2>Let's build resilient quality systems.</h2>
+      <p>Open to discussions regarding Quality Engineering architecture, enterprise automation transformations, and AI-assisted QA modernization.</p>
+      
+      <div class="contact-actions">
+        <a class="btn primary" href="mailto:dusanbubalo@gmail.com">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          dusanbubalo@gmail.com
+        </a>
+        <a class="btn glass" href="tel:+38162464804">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +381 62 464 804
+        </a>
+        <a class="btn glass" href="https://www.linkedin.com/in/dusan-bubalo-894a90130/" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn ↗
+        </a>
+        <a class="btn glass" href="https://github.com/DuciD" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">DUŠAN BUBALO</div>
+  <div>QUALITY ENGINEERING & ARCHITECTURE · AUTOMATION · AI</div>
+</footer>
+
+</main>
+
+<script>
+// Interactive Copy Email Functionality
+function copyEmail(e) {
+  if(e) e.preventDefault();
+  const email = 'dusanbubalo@gmail.com';
+  navigator.clipboard.writeText(email).then(() => {
+    const toast = document.getElementById('copyToast');
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2800);
+  }).catch(() => {
+    window.location.href = 'mailto:dusanbubalo@gmail.com';
+  });
+}
+</script>
+
+</body>
+</html>
